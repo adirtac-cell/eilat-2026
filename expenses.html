@@ -8,6 +8,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0b7285">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -115,12 +116,19 @@
   header.top .title { display:flex; align-items:center; gap:8px; }
   header.top .title .emoji { font-size: 22px; }
   header.top .title h1 { font-size: 16.5px; margin:0; font-weight:800; }
+  .icons { display:flex; align-items:center; gap:8px; }
   .icon-btn {
     width: 34px; height:34px; border-radius: 50%;
     border: 1px solid var(--border); background: var(--surface);
     display:flex; align-items:center; justify-content:center;
     font-size: 15px; cursor:pointer; color: var(--ink-soft);
   }
+  .switcher { display:flex; gap:6px; background: var(--surface); border:1px solid var(--border); border-radius:999px; padding:3px; }
+  .switch-btn {
+    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:14px; text-decoration:none; color: var(--ink-soft);
+  }
+  .switch-btn.active { background: var(--primary); color:#fff; }
 
   main.content { flex:1; padding: 14px 16px 40px; overflow-x:hidden; }
   .tab-panel { display:none; }
@@ -208,6 +216,11 @@
   <header class="top">
     <div class="title"><span class="emoji">💰</span><h1>הוצאות אילת 2026</h1></div>
     <div class="icons">
+      <div class="switcher">
+        <a class="switch-btn" href="index.html" title="בית">🏠</a>
+        <a class="switch-btn" href="shopping.html" title="קניות">🛒</a>
+        <a class="switch-btn active" href="expenses.html" title="הוצאות">💰</a>
+      </div>
       <button class="icon-btn" data-action="toggle-theme" title="ערכת נושא">🌓</button>
     </div>
   </header>
