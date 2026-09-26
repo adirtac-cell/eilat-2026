@@ -74,8 +74,17 @@
 
   /* header */
   header.app-header {
+    position: sticky; top:0; z-index: 20;
+    background: var(--bg);
     display:flex; align-items:center; justify-content:space-between;
     padding: calc(14px + env(safe-area-inset-top)) 2px 12px;
+    margin: 0 -16px; padding-inline: 16px;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  header.app-header.scrolled {
+    border-bottom-color: var(--border);
+    box-shadow: 0 2px 10px rgba(24,50,58,0.06);
   }
   header.app-header .brand { display:flex; align-items:center; gap:8px; }
   header.app-header .brand .emoji { font-size:22px; }
@@ -119,15 +128,13 @@
 
   /* pill nav */
   .pillnav {
-    display:flex; gap:8px; overflow-x:auto; padding: 2px 2px 18px; margin: 0 -2px;
-    -ms-overflow-style:none; scrollbar-width:none;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:2px; margin-bottom:16px;
   }
-  .pillnav::-webkit-scrollbar { display:none; }
   .pillnav a {
-    flex:0 0 auto; background: var(--surface); color: var(--ink); text-decoration:none; text-align:center;
-    padding:12px 16px; border-radius:16px; border:1px solid var(--border); font-weight:700; font-size:14px;
-    white-space:nowrap;
+    background: var(--surface); color: var(--ink); text-decoration:none; text-align:center;
+    padding:13px 6px; border-radius:16px; border:1px solid var(--border); font-weight:700; font-size:14px;
   }
+  @media(max-width:520px){ .pillnav { grid-template-columns:repeat(2,1fr); } }
 
   section { margin:26px 0; }
   h2 { font-size:22px; margin:0 0 12px; }
@@ -307,8 +314,18 @@
     }
   }
 
+  function initHeaderScroll(){
+    var header = document.querySelector('header.app-header');
+    function onScroll(){
+      header.classList.toggle('scrolled', window.scrollY > 4);
+    }
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   initTheme();
   renderCountdown();
+  initHeaderScroll();
 })();
 </script>
 </body>
