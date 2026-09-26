@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>הוצאות · אילת 2026</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b7285">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-firestore-compat.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f7f8;
+    --surface: #FFFFFF;
+    --surface-2: #e6ecee;
+    --ink: #18323a;
+    --ink-soft: #45585e;
+    --muted: #6b7d83;
+    --border: #e6ecee;
+    --primary: #0b7285;
+    --primary-dark: #085a68;
+    --primary-soft: #e8f8fb;
+    --accent: #f59f00;
+    --accent-dark: #c07f22;
+    --accent-soft: #fff4d6;
+    --danger: #C1443B;
+    --danger-soft: #F7E2DF;
+    --good: #2f8f4e;
+    --good-soft: #e4f5e9;
+    --shadow: 0 1px 2px rgba(24,50,58,0.06), 0 2px 10px rgba(24,50,58,0.05);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121b1e;
+      --surface: #17262a;
+      --surface-2: #1c2e32;
+      --ink: #eaf4f5;
+      --ink-soft: #b9cdd1;
+      --muted: #8aa0a5;
+      --border: #26383c;
+      --primary: #4fb3c4;
+      --primary-dark: #7fcbd8;
+      --primary-soft: #1c3438;
+      --accent: #f0b75b;
+      --accent-dark: #f6cd8b;
+      --accent-soft: #3a2f19;
+      --danger: #E4776D;
+      --danger-soft: #3A2320;
+      --good: #6fcf8e;
+      --good-soft: #1c3324;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121b1e;
+    --surface: #17262a;
+    --surface-2: #1c2e32;
+    --ink: #eaf4f5;
+    --ink-soft: #b9cdd1;
+    --muted: #8aa0a5;
+    --border: #26383c;
+    --primary: #4fb3c4;
+    --primary-dark: #7fcbd8;
+    --primary-soft: #1c3438;
+    --accent: #f0b75b;
+    --accent-dark: #f6cd8b;
+    --accent-soft: #3a2f19;
+    --danger: #E4776D;
+    --danger-soft: #3A2320;
+    --good: #6fcf8e;
+    --good-soft: #1c3324;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Heebo', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+  .btn {
+    display: inline-flex; align-items:center; justify-content:center; gap:6px;
+    border:none; border-radius:10px; padding:12px 18px; font-size:15px; font-weight:700;
+    cursor:pointer; width:100%;
+  }
+  .btn-primary { background: var(--primary); color:#fff; }
+  .btn-primary:active { background: var(--primary-dark); }
+  .btn:disabled { opacity:.5; cursor:default; }
+
+  header.top {
+    position: sticky; top:0; z-index: 20;
+    background: var(--bg);
+    padding: calc(14px + env(safe-area-inset-top)) 16px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  header.top .title { display:flex; align-items:center; gap:8px; }
+  header.top .title .emoji { font-size: 22px; }
+  header.top .title h1 { font-size: 16.5px; margin:0; font-weight:800; }
+  .icon-btn {
+    width: 34px; height:34px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 15px; cursor:pointer; color: var(--ink-soft);
+  }
+
+  main.content { flex:1; padding: 14px 16px 40px; overflow-x:hidden; }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  nav.tabbar-top {
+    display:flex; gap:8px; margin-bottom:16px;
+  }
+  nav.tabbar-top button {
+    flex:1; background: var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:10px 6px; font-size:14px; font-weight:700; color:var(--muted); cursor:pointer;
+  }
+  nav.tabbar-top button.active { color:#fff; background: var(--primary); border-color: var(--primary); }
+
+  .total-bar {
+    background: var(--primary-soft); border:1px solid var(--primary); border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .total-bar .lbl { font-size:13.5px; color: var(--primary-dark); font-weight:600; }
+  .total-bar .val { font-size:22px; font-weight:800; color: var(--primary-dark); }
+
+  #addExpenseForm {
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 14px; margin-bottom: 18px; box-shadow: var(--shadow);
+  }
+  #addExpenseForm .field { margin-bottom: 10px; }
+  #addExpenseForm .field:last-of-type { margin-bottom: 0; }
+  #addExpenseForm .mini-label { display:block; font-size: 12px; color: var(--muted); font-weight:600; margin-bottom:5px; }
+  #addExpenseForm input[type=text], #addExpenseForm input[type=number], #addExpenseForm select {
+    width:100%; border:1px solid var(--border); border-radius:10px; padding:11px 13px;
+    background:var(--bg); color:var(--ink); font-size:15px; outline:none;
+  }
+  #addExpenseForm input:focus, #addExpenseForm select:focus { border-color: var(--primary); }
+  #addExpenseForm .row2 { display:grid; grid-template-columns: 1.3fr 1fr; gap:10px; }
+  .fam-check-group { display:flex; flex-wrap:wrap; gap:8px; }
+  .fam-check {
+    display:flex; align-items:center; gap:6px; background: var(--bg); border:1px solid var(--border);
+    border-radius: 10px; padding: 8px 11px; font-size: 13.5px; cursor:pointer; user-select:none;
+  }
+  .fam-check input { accent-color: var(--primary); width:16px; height:16px; }
+  #addExpenseForm .submit-row { margin-top: 12px; }
+
+  .expense-row {
+    background: var(--surface); border:1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 8px;
+  }
+  .expense-row .top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .expense-row .desc { font-size: 15px; font-weight:700; }
+  .expense-row .amtwrap { display:flex; align-items:center; gap:8px; white-space:nowrap; }
+  .expense-row .amount { font-size: 15.5px; font-weight:800; color: var(--primary-dark); }
+  .expense-row .del-btn { background:none; border:none; color: var(--muted); font-size: 15px; cursor:pointer; padding:2px 4px; }
+  .expense-row .meta { font-size: 12px; color: var(--muted); margin-top:5px; line-height:1.5; }
+  .empty-state { text-align:center; padding: 40px 20px; color: var(--muted); }
+  .empty-state .e { font-size: 40px; margin-bottom: 10px; }
+
+  .fam-balance-card {
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .fam-balance-card .fb-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .fam-balance-card .fb-name { font-size: 15.5px; font-weight:800; }
+  .fam-balance-card .fb-net { font-size:15px; font-weight:800; padding:4px 10px; border-radius:20px; }
+  .fb-net.pos { color: var(--good); background: var(--good-soft); }
+  .fb-net.neg { color: var(--danger); background: var(--danger-soft); }
+  .fb-net.zero { color: var(--muted); background: var(--surface-2); }
+  .fam-balance-card .fb-detail { font-size: 12.5px; color: var(--muted); display:flex; gap:14px; }
+
+  .section-title { font-size: 13px; font-weight:700; color: var(--ink-soft); margin: 18px 2px 8px; }
+  .settle-row {
+    display:flex; align-items:center; gap:10px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 8px; font-size: 14.5px;
+  }
+  .settle-row .arrow { color: var(--muted); }
+  .settle-row .who { font-weight:700; }
+  .settle-row .amt { margin-inline-start:auto; font-weight:800; color: var(--primary-dark); }
+
+  .toast-wrap { position: fixed; bottom: 24px; left:50%; transform:translateX(-50%); z-index: 60; display:flex; flex-direction:column; gap:8px; align-items:center; width:100%; max-width: 500px; pointer-events:none; }
+  .toast { background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 30px; font-size: 13.5px; box-shadow: var(--shadow); opacity:0; transform:translateY(8px); transition: all .25s ease; }
+  .toast.show { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap" id="root">
+  <header class="top">
+    <div class="title"><span class="emoji">💰</span><h1>הוצאות אילת 2026</h1></div>
+    <div class="icons">
+      <button class="icon-btn" data-action="toggle-theme" title="ערכת נושא">🌓</button>
+    </div>
+  </header>
+
+  <main class="content">
+    <nav class="tabbar-top">
+      <button class="active" data-tab="list" data-action="switch-tab">🧾 הוצאות</button>
+      <button data-tab="balance" data-action="switch-tab">⚖️ מאזן</button>
+    </nav>
+
+    <div class="tab-panel active" id="panel-list">
+      <div class="total-bar"><span class="lbl">סה״כ הוצאות הטיול</span><span class="val" id="totalSpent">₪0</span></div>
+
+      <form id="addExpenseForm">
+        <div class="field">
+          <span class="mini-label">על מה ההוצאה</span>
+          <input type="text" id="descInput" placeholder="למשל: סופרמרקט, דלק, פיצות" maxlength="60" autocomplete="off">
+        </div>
+        <div class="field row2">
+          <div>
+            <span class="mini-label">סכום (₪)</span>
+            <input type="number" id="amountInput" placeholder="0" min="0" step="0.01" inputmode="decimal">
+          </div>
+          <div>
+            <span class="mini-label">שולם ע״י</span>
+            <select id="paidBySelect"></select>
+          </div>
+        </div>
+        <div class="field">
+          <span class="mini-label">מתחלק בין</span>
+          <div class="fam-check-group" id="splitCheckGroup"></div>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">➕ הוסף הוצאה</button>
+        </div>
+      </form>
+
+      <div id="expensesContainer"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-balance">
+      <div id="balanceContainer"></div>
+    </div>
+  </main>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // Same trip Firebase project as shopping.html — shared on purpose, since
+  // this is the same group of families, just a different Firestore collection.
+  var FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDK2a4Smp3uDY3Sozbj4neeAdR-yI6YuZc",
+    authDomain: "eilat-2026.firebaseapp.com",
+    projectId: "eilat-2026",
+    storageBucket: "eilat-2026.firebasestorage.app",
+    messagingSenderId: "1075739386152",
+    appId: "1:1075739386152:web:c044cd515466f48d1eb01d",
+    measurementId: "G-1FPPY9DKF8"
+  };
+
+  var LS_THEME = 'eilat2026_expenses_theme_v1';
+
+  var FAMILIES = [
+    {id:'ashkenazi', label:'אשכנזי'},
+    {id:'cohen',     label:'כהן'},
+    {id:'margulin',  label:'מרג׳ולין'},
+    {id:'hajaj',     label:'חג׳ג׳'}
+  ];
+  var FAM_MAP = {};
+  FAMILIES.forEach(function(f){ FAM_MAP[f.id] = f; });
+
+  var db = null;
+  var state = { expenses: [] };
+  var activeTab = 'list';
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){
+    return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function toast(msg){
+    var t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    $('toastWrap').appendChild(t);
+    requestAnimationFrame(function(){ t.classList.add('show'); });
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 300); }, 2600);
+  }
+  function fmtMoney(n){
+    var v = Math.round((n + Number.EPSILON) * 100) / 100;
+    var isInt = Math.abs(v - Math.round(v)) < 0.005;
+    return '₪' + (isInt
+      ? Math.round(v).toLocaleString('he-IL')
+      : v.toLocaleString('he-IL', {minimumFractionDigits:2, maximumFractionDigits:2}));
+  }
+
+  /* ---------- THEME ---------- */
+  function initTheme(){
+    var saved = localStorage.getItem(LS_THEME);
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  }
+  function toggleTheme(){
+    var cur = document.documentElement.getAttribute('data-theme');
+    var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next;
+    if (!cur) next = sysDark ? 'light' : 'dark';
+    else if (cur === 'dark') next = 'light';
+    else next = 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(LS_THEME, next);
+  }
+
+  /* ---------- SETUP ---------- */
+  function populateForm(){
+    var sel = $('paidBySelect');
+    FAMILIES.forEach(function(f){
+      var o = document.createElement('option');
+      o.value = f.id; o.textContent = f.label;
+      sel.appendChild(o);
+    });
+    var group = $('splitCheckGroup');
+    FAMILIES.forEach(function(f){
+      var label = document.createElement('label');
+      label.className = 'fam-check';
+      label.innerHTML = '<input type="checkbox" id="split_' + f.id + '" checked> ' + esc(f.label);
+      group.appendChild(label);
+    });
+  }
+
+  function switchTab(tab){
+    activeTab = tab;
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    $('panel-' + tab).classList.add('active');
+    document.querySelectorAll('nav.tabbar-top button').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+  }
+
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-action]');
+    if (!el) return;
+    var action = el.dataset.action;
+    if (action === 'toggle-theme') toggleTheme();
+    else if (action === 'switch-tab') switchTab(el.dataset.tab);
+    else if (action === 'delete-expense') {
+      if (confirm('למחוק את ההוצאה הזו?')) db.collection('expenses').doc(el.dataset.id).delete();
+    }
+  });
+
+  document.addEventListener('submit', function(e){
+    if (e.target.id !== 'addExpenseForm') return;
+    e.preventDefault();
+    var desc = $('descInput').value.trim();
+    var amount = parseFloat($('amountInput').value);
+    if (!desc) { toast('הוסיפו תיאור להוצאה'); return; }
+    if (!amount || amount <= 0) { toast('הכניסו סכום תקין'); return; }
+    var paidBy = $('paidBySelect').value;
+    var splitAmong = FAMILIES.filter(function(f){ return $('split_' + f.id).checked; }).map(function(f){ return f.id; });
+    if (!splitAmong.length) { toast('בחרו לפחות משפחה אחת לחלוקה'); return; }
+
+    var btn = e.target.querySelector('button[type=submit]');
+    btn.disabled = true;
+    db.collection('expenses').add({
+      description: desc, amount: amount, paidBy: paidBy, splitAmong: splitAmong,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){
+      e.target.reset();
+      FAMILIES.forEach(function(f){ $('split_' + f.id).checked = true; });
+      btn.disabled = false;
+      $('descInput').focus();
+    }).catch(function(err){
+      toast('שגיאה בהוספה: ' + err.message);
+      btn.disabled = false;
+    });
+  });
+
+  /* ---------- DATA ---------- */
+  function subscribeExpenses(){
+    db.collection('expenses').orderBy('createdAt', 'desc').onSnapshot(function(snap){
+      state.expenses = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderExpenses();
+      renderBalance();
+    }, function(err){ toast('שגיאת טעינה: ' + err.message); });
+  }
+
+  /* ---------- RENDER: LIST ---------- */
+  function renderExpenses(){
+    var total = state.expenses.reduce(function(s, e){ return s + (e.amount || 0); }, 0);
+    $('totalSpent').textContent = fmtMoney(total);
+
+    var container = $('expensesContainer');
+    if (!state.expenses.length) {
+      container.innerHTML = '<div class="empty-state"><div class="e">🧾</div>עוד אין הוצאות<br>הוסיפו את ההוצאה הראשונה למעלה</div>';
+      return;
+    }
+    var html = '';
+    state.expenses.forEach(function(e){
+      var payer = FAM_MAP[e.paidBy] ? FAM_MAP[e.paidBy].label : e.paidBy;
+      var splitLabel = (e.splitAmong && e.splitAmong.length === FAMILIES.length)
+        ? 'כל המשפחות'
+        : (e.splitAmong || []).map(function(id){ return FAM_MAP[id] ? FAM_MAP[id].label : id; }).join(', ');
+      html += '<div class="expense-row">' +
+        '<div class="top"><div class="desc">' + esc(e.description) + '</div>' +
+        '<div class="amtwrap"><span class="amount">' + fmtMoney(e.amount) + '</span>' +
+        '<button class="del-btn" data-action="delete-expense" data-id="' + e.id + '">✕</button></div></div>' +
+        '<div class="meta">שולם ע״י ' + esc(payer) + ' · מתחלק: ' + esc(splitLabel) + '</div>' +
+        '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  /* ---------- RENDER: BALANCE ---------- */
+  function computeBalances(){
+    var totals = {};
+    FAMILIES.forEach(function(f){ totals[f.id] = { paid: 0, share: 0 }; });
+    state.expenses.forEach(function(e){
+      if (totals[e.paidBy]) totals[e.paidBy].paid += (e.amount || 0);
+      var among = e.splitAmong && e.splitAmong.length ? e.splitAmong : FAMILIES.map(function(f){ return f.id; });
+      var per = (e.amount || 0) / among.length;
+      among.forEach(function(id){ if (totals[id]) totals[id].share += per; });
+    });
+    var nets = {};
+    FAMILIES.forEach(function(f){ nets[f.id] = totals[f.id].paid - totals[f.id].share; });
+    return { totals: totals, nets: nets };
+  }
+
+  function settleUp(nets){
+    var creditors = [], debtors = [];
+    Object.keys(nets).forEach(function(id){
+      var v = Math.round(nets[id] * 100) / 100;
+      if (v > 0.005) creditors.push({ id: id, amt: v });
+      else if (v < -0.005) debtors.push({ id: id, amt: -v });
+    });
+    creditors.sort(function(a, b){ return b.amt - a.amt; });
+    debtors.sort(function(a, b){ return b.amt - a.amt; });
+    var result = [], ci = 0, di = 0;
+    while (ci < creditors.length && di < debtors.length) {
+      var c = creditors[ci], d = debtors[di];
+      var amt = Math.min(c.amt, d.amt);
+      result.push({ from: d.id, to: c.id, amount: amt });
+      c.amt -= amt; d.amt -= amt;
+      if (c.amt < 0.005) ci++;
+      if (d.amt < 0.005) di++;
+    }
+    return result;
+  }
+
+  function renderBalance(){
+    var container = $('balanceContainer');
+    if (!state.expenses.length) {
+      container.innerHTML = '<div class="empty-state"><div class="e">⚖️</div>אין עדיין הוצאות לחישוב מאזן</div>';
+      return;
+    }
+    var b = computeBalances();
+    var html = '<div class="section-title">לפי משפחה</div>';
+    FAMILIES.forEach(function(f){
+      var net = b.nets[f.id];
+      var cls = net > 0.005 ? 'pos' : (net < -0.005 ? 'neg' : 'zero');
+      var netLabel = net > 0.005 ? ('מקבל.ת ' + fmtMoney(net))
+        : (net < -0.005 ? ('חייב.ת ' + fmtMoney(-net)) : 'מאוזן');
+      html += '<div class="fam-balance-card">' +
+        '<div class="fb-head"><span class="fb-name">' + esc(f.label) + '</span>' +
+        '<span class="fb-net ' + cls + '">' + netLabel + '</span></div>' +
+        '<div class="fb-detail"><span>שילמ.ה בפועל: ' + fmtMoney(b.totals[f.id].paid) + '</span>' +
+        '<span>חלק יחסי: ' + fmtMoney(b.totals[f.id].share) + '</span></div>' +
+        '</div>';
+    });
+
+    var settlements = settleUp(b.nets);
+    html += '<div class="section-title">התחשבנות מומלצת</div>';
+    if (!settlements.length) {
+      html += '<div class="empty-state" style="padding:24px 20px;"><div class="e">🎉</div>הכל מאוזן, אין צורך בהעברות</div>';
+    } else {
+      settlements.forEach(function(s){
+        html += '<div class="settle-row">' +
+          '<span class="who">' + esc(FAM_MAP[s.from].label) + '</span>' +
+          '<span class="arrow">משלמ.ים ל-</span>' +
+          '<span class="who">' + esc(FAM_MAP[s.to].label) + '</span>' +
+          '<span class="amt">' + fmtMoney(s.amount) + '</span>' +
+          '</div>';
+      });
+    }
+    container.innerHTML = html;
+  }
+
+  /* ---------- BOOT ---------- */
+  function boot(){
+    initTheme();
+    populateForm();
+    try {
+      if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+    } catch(e) {
+      toast('אתחול Firebase נכשל: ' + e.message);
+      return;
+    }
+    subscribeExpenses();
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
