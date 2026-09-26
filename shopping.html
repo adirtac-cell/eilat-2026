@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>קניות · אילת 2026</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b7285">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.3.0/firebase-firestore-compat.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f7f8;
+    --surface: #FFFFFF;
+    --surface-2: #e6ecee;
+    --ink: #18323a;
+    --ink-soft: #45585e;
+    --muted: #6b7d83;
+    --border: #e6ecee;
+    --primary: #0b7285;
+    --primary-dark: #085a68;
+    --primary-soft: #e8f8fb;
+    --accent: #f59f00;
+    --accent-dark: #c07f22;
+    --accent-soft: #fff4d6;
+    --danger: #C1443B;
+    --danger-soft: #F7E2DF;
+    --shadow: 0 1px 2px rgba(24,50,58,0.06), 0 2px 10px rgba(24,50,58,0.05);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121b1e;
+      --surface: #17262a;
+      --surface-2: #1c2e32;
+      --ink: #eaf4f5;
+      --ink-soft: #b9cdd1;
+      --muted: #8aa0a5;
+      --border: #26383c;
+      --primary: #4fb3c4;
+      --primary-dark: #7fcbd8;
+      --primary-soft: #1c3438;
+      --accent: #f0b75b;
+      --accent-dark: #f6cd8b;
+      --accent-soft: #3a2f19;
+      --danger: #E4776D;
+      --danger-soft: #3A2320;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121b1e;
+    --surface: #17262a;
+    --surface-2: #1c2e32;
+    --ink: #eaf4f5;
+    --ink-soft: #b9cdd1;
+    --muted: #8aa0a5;
+    --border: #26383c;
+    --primary: #4fb3c4;
+    --primary-dark: #7fcbd8;
+    --primary-soft: #1c3438;
+    --accent: #f0b75b;
+    --accent-dark: #f6cd8b;
+    --accent-soft: #3a2f19;
+    --danger: #E4776D;
+    --danger-soft: #3A2320;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.25);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Heebo', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    position: relative;
+  }
+  a { color: var(--primary-dark); }
+
+  /* ---------- Centered onboarding screens ---------- */
+  .center-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: calc(28px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom));
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    justify-content: center;
+  }
+  .brand .emoji { font-size: 34px; }
+  .brand h1 { font-size: 21px; margin: 0; font-weight: 800; color: var(--primary-dark); }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .card h2 { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
+  .card p { margin: 0 0 14px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; }
+  .field { margin-bottom: 12px; }
+  .field label { display:block; font-size: 13px; color: var(--ink-soft); margin-bottom: 5px; font-weight: 500; }
+  .field input[type=text], .field textarea, .field select {
+    width: 100%;
+    padding: 11px 13px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    outline: none;
+  }
+  .field input[type=text]:focus, .field textarea:focus, .field select:focus {
+    border-color: var(--primary);
+  }
+  .field textarea { min-height: 110px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 12.5px; resize: vertical; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+  }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:active { background: var(--primary-dark); }
+  .btn-accent { background: var(--accent); color: #3A2400; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-ghost { background: transparent; color: var(--primary-dark); border: 1px solid var(--border); }
+  .btn-sm { width: auto; padding: 7px 12px; font-size: 13px; border-radius: 8px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 10px; line-height: 1.6; }
+  .steps-list { margin: 0 0 14px; padding-inline-start: 20px; color: var(--ink-soft); font-size: 14px; line-height: 1.8; }
+  .steps-list li { margin-bottom: 6px; }
+  .steps-list b { color: var(--ink); }
+  .rules-box {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 12px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 11.5px;
+    white-space: pre-wrap;
+    direction: ltr;
+    text-align: left;
+    color: var(--ink-soft);
+    margin: 10px 0;
+    position: relative;
+  }
+  .link-box {
+    background: var(--surface-2);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    word-break: break-all;
+    direction: ltr;
+    text-align: left;
+    color: var(--ink-soft);
+    margin: 8px 0;
+  }
+  .row { display:flex; gap: 10px; }
+  .row > * { flex: 1; }
+  .center-icon { text-align:center; font-size: 46px; margin-bottom: 6px; }
+  .muted-center { text-align:center; color: var(--muted); font-size: 13.5px; margin-top: 14px; }
+  details summary { cursor:pointer; color: var(--primary-dark); font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+  .err-box { background: var(--danger-soft); color: var(--danger); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; margin-bottom: 12px; }
+
+  /* ---------- App shell ---------- */
+  #appShell { display:none; flex-direction:column; min-height:100vh; }
+  header.top {
+    position: sticky; top:0; z-index: 20;
+    background: var(--bg);
+    padding: calc(14px + env(safe-area-inset-top)) 16px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  header.top .title { display:flex; align-items:center; gap:8px; }
+  header.top .title .emoji { font-size: 22px; }
+  header.top .title h1 { font-size: 16.5px; margin:0; font-weight:800; }
+  header.top .icons { display:flex; gap: 6px; }
+  .icon-btn {
+    width: 34px; height:34px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--surface);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 15px; cursor:pointer; color: var(--ink-soft);
+  }
+
+  main.content { flex:1; padding: 14px 16px 100px; overflow-x:hidden; }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  .status-idle {
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 14px; font-size: 13.5px; color: var(--muted); text-align:center;
+  }
+  .status-active {
+    background: var(--accent-soft); border:1px solid var(--accent); border-radius: var(--radius);
+    padding: 12px 14px; font-size: 13.5px; color: var(--accent-dark); font-weight:600; text-align:center;
+  }
+
+  /* ---- Shopping tab ---- */
+  .shop-intro { text-align:center; padding: 34px 12px 20px; }
+  .shop-intro .emoji { font-size: 52px; margin-bottom: 10px; }
+  .shop-intro h2 { font-size: 19px; margin: 0 0 8px; }
+  .shop-intro p { color: var(--ink-soft); font-size: 14px; line-height:1.6; margin: 0 0 20px; max-width: 340px; margin-inline:auto; }
+  .shop-intro .btn { max-width: 320px; margin-inline:auto; padding: 15px; font-size: 16px; }
+  .shop-progress-bar {
+    position: sticky; top: 0; z-index: 5; background: var(--bg);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding: 4px 2px 14px;
+  }
+  .shop-progress-text { font-size: 14.5px; font-weight:700; color: var(--ink); }
+  .shop-progress-text span { color: var(--muted); font-weight:500; }
+  .shop-finish-btn {
+    background: var(--accent); color:#3A2400; border:none; border-radius:10px; padding: 10px 16px;
+    font-weight:800; font-size: 14px; cursor:pointer; white-space:nowrap;
+  }
+  .shop-item-row {
+    display:flex; align-items:center; gap:12px;
+    background: var(--surface); border:1px solid var(--border);
+    border-radius: 12px; padding: 14px; margin-bottom: 8px; cursor:pointer;
+  }
+  .shop-item-row.checked { opacity:.5; }
+  .shop-item-row .checkbox { width:28px; height:28px; min-width:28px; font-size:17px; }
+  .shop-item-row .item-name { font-size: 15.5px; }
+  .shop-finish-bottom { margin-top: 18px; }
+
+  #addItemForm {
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 12px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
+  #addItemForm .row1 { display:flex; gap:8px; }
+  #addItemForm input[type=text] {
+    flex:1; border:1px solid var(--border); border-radius: 10px; padding: 12px 13px; background: var(--bg); color:var(--ink); font-size:15px; outline:none; min-width:0;
+  }
+  #addItemForm input[type=text]:focus, #addItemForm select:focus { border-color: var(--primary); }
+  #addItemForm select {
+    width:100%; border:1px solid var(--border); border-radius:10px; padding:12px 13px; background:var(--bg); color:var(--ink); font-size:15px; outline:none;
+  }
+  #addItemForm .row1 button[type="submit"] {
+    background: var(--primary); color:#fff; border:none; border-radius:10px; padding: 0 20px; font-weight:700; font-size: 15px; cursor:pointer; white-space:nowrap;
+  }
+  .add-detail-head { display:flex; align-items:center; justify-content:space-between; padding: 2px 2px 10px; }
+  #addDetailName { font-size: 15px; font-weight:700; color: var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .link-btn { background:none; border:none; color: var(--primary-dark); font-size: 12.5px; font-weight:600; cursor:pointer; padding:4px 6px; white-space:nowrap; }
+  #addItemForm .row2 { display:grid; grid-template-columns: 1.4fr 1fr; gap:10px; margin-bottom: 12px; }
+  .field-group { display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .field-group .mini-label { font-size: 11.5px; color: var(--muted); font-weight:600; padding-inline-start:2px; }
+  #addDetailsRow .btn { font-size: 15.5px; }
+
+  .cat-group { margin-bottom: 16px; }
+  .cat-head {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 4px 2px 8px; color: var(--ink-soft); font-weight:700; font-size: 13.5px;
+  }
+  .cat-head .l { display:flex; align-items:center; gap:7px; }
+  .cat-head .count { color: var(--muted); font-weight:500; font-size:12.5px; }
+  .item-row {
+    display:flex; align-items:center; gap:10px;
+    background: var(--surface); border:1px solid var(--border);
+    border-radius: 11px; padding: 10px 12px; margin-bottom: 7px;
+  }
+  .item-row.checked { opacity: .55; }
+  .checkbox {
+    width: 24px; height:24px; min-width:24px; border-radius:7px; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; background: var(--bg); font-size: 15px; color:#fff;
+  }
+  .checkbox.on { background: var(--primary); border-color: var(--primary); }
+  .item-info { flex:1; min-width:0; }
+  .item-name { font-size: 14.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .item-row.checked .item-name { text-decoration: line-through; }
+  .item-meta { font-size: 11.5px; color: var(--muted); margin-top:1px; }
+  .item-del { background:none; border:none; color: var(--muted); font-size: 17px; cursor:pointer; padding: 4px 6px; }
+  .empty-state { text-align:center; padding: 40px 20px; color: var(--muted); }
+  .empty-state .e { font-size: 40px; margin-bottom: 10px; }
+
+  /* history */
+  .hist-item {
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 13px 14px; margin-bottom: 10px;
+  }
+  .hist-item .hh { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+  .hist-item .hh .who { font-weight:700; font-size: 14px; }
+  .hist-item .hh .when { font-size:12px; color:var(--muted); }
+  .hist-tags { display:flex; flex-wrap:wrap; gap:5px; }
+  .hist-tag { background: var(--surface-2); color: var(--ink-soft); font-size: 11.5px; padding: 3px 9px; border-radius: 20px; }
+
+  /* trip group tab */
+  .section-title { font-size: 13px; font-weight:700; color: var(--ink-soft); margin: 4px 2px 8px; }
+  .member-row {
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background: var(--surface); border:1px solid var(--border); border-radius: 11px; padding: 10px 12px; margin-bottom: 7px;
+  }
+  .member-row .mname { font-size: 14px; font-weight:600; display:flex; align-items:center; gap:6px; }
+  .badge { font-size: 10.5px; padding: 2px 7px; border-radius: 20px; font-weight:700; }
+  .badge-head { background: var(--primary-soft); color: var(--primary-dark); }
+  .badge-pending { background: var(--accent-soft); color: var(--accent-dark); }
+  .member-actions { display:flex; gap:6px; }
+  .tab-badge {
+    display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px;
+    background: var(--danger); color:#fff; font-size: 10px; border-radius: 10px; padding: 0 4px; margin-inline-start: 4px; font-weight:700;
+  }
+  .tab-dot {
+    display:inline-block; width:8px; height:8px; border-radius:50%;
+    background: var(--accent); margin-inline-start: 3px; vertical-align: top; margin-top: 2px;
+  }
+
+  nav.tabbar {
+    position: fixed; bottom:0; left:50%; transform: translateX(-50%);
+    width:100%; max-width:560px;
+    background: var(--surface); border-top: 1px solid var(--border);
+    display:flex; padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    z-index: 30;
+  }
+  nav.tabbar button {
+    flex:1; background:none; border:none; padding: 8px 4px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:2px; font-size: 11px; color: var(--muted); font-weight:600;
+  }
+  nav.tabbar button .ic { font-size: 19px; }
+  nav.tabbar button.active { color: var(--primary-dark); }
+
+  /* modal */
+  .modal-bg {
+    display:none; position: fixed; inset:0; background: rgba(20,20,15,0.5); z-index: 50;
+    align-items:flex-end; justify-content:center;
+  }
+  .modal-bg.open { display:flex; }
+  .modal-sheet {
+    background: var(--bg); width:100%; max-width:560px; border-radius: 18px 18px 0 0;
+    max-height: 85vh; overflow-y:auto; padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  }
+  .modal-sheet .mh { display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; }
+  .modal-sheet .mh h2 { font-size: 17px; margin:0; }
+
+  .toast-wrap { position: fixed; bottom: 78px; left:50%; transform:translateX(-50%); z-index: 60; display:flex; flex-direction:column; gap:8px; align-items:center; width:100%; max-width: 500px; pointer-events:none; }
+  .toast { background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 30px; font-size: 13.5px; box-shadow: var(--shadow); opacity:0; transform:translateY(8px); transition: all .25s ease; }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  .spinner { width:18px; height:18px; border-radius:50%; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; animation: spin .7s linear infinite; display:inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .copy-btn { position:absolute; top:8px; left:8px; background: var(--surface); border:1px solid var(--border); border-radius:6px; padding:4px 8px; font-size:11px; cursor:pointer; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="wrap" id="root">
+
+  <!-- ONBOARDING SCREENS -->
+  <div class="center-screen" id="screen-name" style="display:none;">
+    <div class="brand"><span class="emoji">🛒</span><h1>קניות · אילת 2026</h1></div>
+    <div class="card">
+      <div class="center-icon" id="nameScreenIcon">👋</div>
+      <h2 id="nameScreenTitle">איך קוראים לך?</h2>
+      <p id="nameScreenDesc">השם יוצג לשאר המשתתפים בטיול ברשימה ובהיסטוריה.</p>
+      <form id="nameForm">
+        <div class="field">
+          <input type="text" id="nameInput" placeholder="לדוגמה: דנה" maxlength="30" autocomplete="off">
+        </div>
+        <button type="submit" class="btn btn-primary" id="nameSubmitBtn">המשך</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="center-screen" id="screen-pending" style="display:none;">
+    <div class="brand"><span class="emoji">🛒</span><h1>קניות · אילת 2026</h1></div>
+    <div class="card" style="text-align:center;">
+      <div class="center-icon">⏳</div>
+      <h2>ממתינים לאישור</h2>
+      <p>הבקשה שלך.ך להצטרף נשלחה. מארגן/ת הטיול צריכ.ה לאשר אותך — ברגע שזה יקרה, הרשימה תיפתח כאן אוטומטית.</p>
+    </div>
+  </div>
+
+  <div class="center-screen" id="screen-rejected" style="display:none;">
+    <div class="brand"><span class="emoji">🛒</span><h1>קניות · אילת 2026</h1></div>
+    <div class="card" style="text-align:center;">
+      <div class="center-icon">🚫</div>
+      <h2>הבקשה לא אושרה</h2>
+      <p>פנו למארגן/ת הטיול אם זו טעות.</p>
+    </div>
+  </div>
+
+  <div class="center-screen" id="screen-loading">
+    <div style="text-align:center;"><span class="spinner" style="border-top-color: var(--primary); border-color: rgba(11,114,133,.25);"></span></div>
+  </div>
+
+  <div class="center-screen" id="screen-error" style="display:none;">
+    <div class="card" style="text-align:center;">
+      <div class="center-icon">⚠️</div>
+      <h2>לא הצלחנו להתחבר</h2>
+      <p id="errorText">ודאו שחוקי ה-Firestore בפרויקט מוגדרים לאפשר read/write, ונסו שוב.</p>
+      <button class="btn btn-ghost" data-action="retry-connect">נסו שוב</button>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="appShell">
+    <header class="top">
+      <div class="title"><span class="emoji">🛒</span><h1 id="familyNameLabel">קניות אילת 2026</h1></div>
+      <div class="icons">
+        <button class="icon-btn" data-action="toggle-theme" title="ערכת נושא">🌓</button>
+        <button class="icon-btn" data-action="open-help" title="עזרה">❔</button>
+      </div>
+    </header>
+    <main class="content">
+      <div class="tab-panel active" id="panel-list">
+        <form id="addItemForm">
+          <div class="row1" id="addNameRow">
+            <input type="text" id="itemNameInput" placeholder="הוסיפו מוצר... (למשל חלב)" maxlength="60" autocomplete="off">
+            <button type="submit">הבא</button>
+          </div>
+          <div id="addDetailsRow" style="display:none;">
+            <div class="add-detail-head">
+              <span id="addDetailName"></span>
+              <button type="button" class="link-btn" data-action="add-back">✎ שנה שם</button>
+            </div>
+            <div class="row2">
+              <div class="field-group">
+                <span class="mini-label">קטגוריה</span>
+                <select id="itemCategorySelect"></select>
+              </div>
+              <div class="field-group">
+                <span class="mini-label">כמות (לא חובה)</span>
+                <input type="text" id="itemQtyInput" placeholder="למשל 2 יח׳" maxlength="20" autocomplete="off">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">הוסף לרשימה</button>
+          </div>
+        </form>
+        <div id="itemsContainer"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-shopping">
+        <div id="shoppingContent"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-history">
+        <div id="historyContainer"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-family">
+        <div id="familyContainer"></div>
+      </div>
+    </main>
+
+    <nav class="tabbar">
+      <button class="active" data-tab="list" data-action="switch-tab"><span class="ic">🛒</span>רשימה</button>
+      <button data-tab="shopping" data-action="switch-tab"><span class="ic">🛍️</span>קנייה<span id="shoppingBadge"></span></button>
+      <button data-tab="history" data-action="switch-tab"><span class="ic">🕓</span>היסטוריה</button>
+      <button data-tab="family" data-action="switch-tab"><span class="ic">🧳</span>משתתפים<span id="pendingBadge"></span></button>
+    </nav>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div class="modal-bg" id="helpModal">
+    <div class="modal-sheet">
+      <div class="mh"><h2>עזרה והזמנת משתתפים</h2><button class="icon-btn" data-action="close-help">✕</button></div>
+      <div class="section-title">קישור הזמנה</div>
+      <p style="font-size:13.5px;color:var(--ink-soft);margin:0 0 6px;">שלחו את הקישור הזה לחברי הטיול לאילת. כל אחד שיפתח אותו יוכל לבקש להצטרף, ואתם תצטרכו לאשר אותו בלשונית "משתתפים".</p>
+      <div class="link-box" id="inviteLinkBox">—</div>
+      <button class="btn btn-primary" data-action="copy-invite" style="margin-bottom:18px;">העתק קישור הזמנה</button>
+      <div class="section-title">חוקי Firestore (אם משהו מפסיק לעבוד)</div>
+      <div class="rules-box">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}<button class="copy-btn" data-action="copy-rules">העתק</button></div>
+      <p class="hint">ודאו שהחוקים האלה מוגדרים תחת Firestore Database ← Rules בפרויקט ה-Firebase שלכם.</p>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CATEGORIES = [
+    {id:'produce', label:'פירות וירקות', emoji:'🥬'},
+    {id:'dairy',   label:'מוצרי חלב וביצים', emoji:'🥛'},
+    {id:'meat',    label:'בשר, דגים ועוף', emoji:'🍗'},
+    {id:'bakery',  label:'מאפים ולחם', emoji:'🍞'},
+    {id:'pantry',  label:'יבשים ושימורים', emoji:'🥫'},
+    {id:'spices',  label:'תבלינים ורטבים', emoji:'🧂'},
+    {id:'frozen',  label:'קפואים', emoji:'🧊'},
+    {id:'drinks',  label:'משקאות', emoji:'🥤'},
+    {id:'snacks',  label:'חטיפים וממתקים', emoji:'🍬'},
+    {id:'cleaning',label:'ניקיון', emoji:'🧽'},
+    {id:'hygiene', label:'היגיינה וטיפוח', emoji:'🧴'},
+    {id:'other',   label:'אחר', emoji:'🛒'}
+  ];
+  var CAT_MAP = {};
+  CATEGORIES.forEach(function(c){ CAT_MAP[c.id] = c; });
+
+  // Dedicated Firebase project for this trip only — separate from any other
+  // shopping-list app (e.g. the family one), so data can never mix.
+  var FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDK2a4Smp3uDY3Sozbj4neeAdR-yI6YuZc",
+    authDomain: "eilat-2026.firebaseapp.com",
+    projectId: "eilat-2026",
+    storageBucket: "eilat-2026.firebasestorage.app",
+    messagingSenderId: "1075739386152",
+    appId: "1:1075739386152:web:c044cd515466f48d1eb01d",
+    measurementId: "G-1FPPY9DKF8"
+  };
+
+  // Namespaced separately from any other shopping-list app (e.g. the family one)
+  // so localStorage never collides even if both are served from the same origin.
+  var LS_MEMBER_ID = 'eilat2026_shoplist_memberid_v1';
+  var LS_MEMBER_NAME = 'eilat2026_shoplist_membername_v1';
+  var LS_THEME = 'eilat2026_shoplist_theme_v1';
+
+  var db = null;
+  var memberId = null;
+  var memberName = null;
+  var isHead = false;
+  var state = { members: [], items: [], sessions: [], history: [] };
+  var listeners = [];
+  var activeTab = 'list';
+  var addStep = 1;
+  var pendingItemName = '';
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){
+    return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+  function show(id){ ['screen-name','screen-pending','screen-rejected','screen-loading','screen-error'].forEach(function(s){
+      $(s).style.display = (s === id) ? 'flex' : 'none';
+    });
+    $('appShell').style.display = (id === 'app') ? 'flex' : 'none';
+  }
+  function showApp(){
+    ['screen-name','screen-pending','screen-rejected','screen-loading','screen-error'].forEach(function(s){ $(s).style.display='none'; });
+    $('appShell').style.display = 'flex';
+  }
+  function toast(msg){
+    var t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    $('toastWrap').appendChild(t);
+    requestAnimationFrame(function(){ t.classList.add('show'); });
+    setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); }, 300); }, 2600);
+  }
+
+  /* ---------- THEME ---------- */
+  function initTheme(){
+    var saved = localStorage.getItem(LS_THEME);
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  }
+  function toggleTheme(){
+    var cur = document.documentElement.getAttribute('data-theme');
+    var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next;
+    if (!cur) next = sysDark ? 'light' : 'dark';
+    else if (cur === 'dark') next = 'light';
+    else next = 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(LS_THEME, next);
+  }
+
+  /* ---------- FIREBASE ---------- */
+  function inviteLink(){
+    return window.location.origin + window.location.pathname;
+  }
+
+  function initFirebase(cfg){
+    if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(cfg);
+    db = firebase.firestore();
+  }
+
+  /* ---------- BOOT SEQUENCE ---------- */
+  function boot(){
+    initTheme();
+    try {
+      initFirebase(FIREBASE_CONFIG);
+    } catch(e) {
+      showError('אתחול Firebase נכשל: ' + e.message);
+      return;
+    }
+    show('screen-loading');
+    proceedWithIdentity();
+  }
+
+  function showError(msg){
+    $('errorText').textContent = msg || 'ודאו שחוקי ה-Firestore בפרויקט מוגדרים לאפשר read/write, ונסו שוב.';
+    show('screen-error');
+  }
+
+  function proceedWithIdentity(){
+    memberId = localStorage.getItem(LS_MEMBER_ID);
+    memberName = localStorage.getItem(LS_MEMBER_NAME);
+
+    if (memberId && memberName) {
+      watchOwnMembership();
+      return;
+    }
+    // need a name first
+    $('nameScreenIcon').textContent = '👋';
+    $('nameScreenTitle').textContent = 'איך קוראים לך?';
+    $('nameScreenDesc').textContent = 'השם יוצג לשאר המשתתפים בטיול ברשימה ובהיסטוריה.';
+    show('screen-name');
+  }
+
+  function watchOwnMembership(){
+    show('screen-loading');
+    var unsub = db.collection('members').doc(memberId).onSnapshot(function(doc){
+      if (!doc.exists) {
+        // was removed
+        localStorage.removeItem(LS_MEMBER_ID);
+        localStorage.removeItem(LS_MEMBER_NAME);
+        location.reload();
+        return;
+      }
+      var data = doc.data();
+      isHead = !!data.isHead;
+      memberName = data.name;
+      if (data.status === 'approved') {
+        startApp();
+      } else if (data.status === 'rejected') {
+        show('screen-rejected');
+      } else {
+        show('screen-pending');
+      }
+    }, function(err){
+      showError('שגיאת הרשאות: ' + err.message + ' — ודאו שחוקי ה-Firestore מוגדרים לאפשר read/write.');
+    });
+    listeners.push(unsub);
+  }
+
+  /* ---------- NAME SUBMIT -> HEAD OR JOINER ---------- */
+  document.addEventListener('submit', function(e){
+    if (e.target.id === 'nameForm') {
+      e.preventDefault();
+      var name = $('nameInput').value.trim();
+      if (!name) return;
+      var btn = $('nameSubmitBtn');
+      btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+      registerIdentity(name).catch(function(err){
+        btn.disabled = false; btn.textContent = 'המשך';
+        toast('שגיאה: ' + err.message);
+      });
+    }
+    if (e.target.id === 'addItemForm') {
+      e.preventDefault();
+      if (addStep === 1) {
+        var nameVal = $('itemNameInput').value.trim();
+        if (!nameVal) return;
+        pendingItemName = nameVal;
+        $('itemCategorySelect').value = guessCategory(nameVal);
+        $('addDetailName').textContent = nameVal;
+        $('addNameRow').style.display = 'none';
+        $('addDetailsRow').style.display = 'block';
+        addStep = 2;
+        $('itemQtyInput').focus();
+      } else {
+        var cat = $('itemCategorySelect').value;
+        var qty = $('itemQtyInput').value.trim();
+        db.collection('items').add({
+          name: pendingItemName, category: cat, quantity: qty,
+          checked: false, addedBy: memberId, addedByName: memberName,
+          addedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function(){
+          resetAddForm();
+        }).catch(function(err){ toast('שגיאה בהוספה: ' + err.message); });
+      }
+    }
+  });
+
+  function resetAddForm(){
+    pendingItemName = '';
+    addStep = 1;
+    $('itemNameInput').value = '';
+    $('itemQtyInput').value = '';
+    $('addDetailsRow').style.display = 'none';
+    $('addNameRow').style.display = 'flex';
+    $('itemNameInput').focus();
+  }
+
+  /* ---------- CATEGORY AUTO-GUESS ---------- */
+  var CATEGORY_KEYWORDS = {
+    dairy: ['חלב','גבינ','קוטג','יוגורט','שמנת','חמא','ביצ','לבן','מעדן','אשל','טרה','מוצרלה','פטה','קשקבל','מילקי','דנונה','יופלה','אקטיביה','תנובה','פודינג','ריו','שוקופרש','לבנה','גבינה'],
+    meat: ['עוף','חזה עוף','שניצל','בשר','בקר','טחון','כבש','הודו','נקניק','המבורגר','קבב','דג','דגים','סלמון','טונה','פילה','קציצות','פסטרמה','כבד','אנטריקוט','פרגית','שוקיים','כרעיים','קורנביף','חזיר','סטייק'],
+    bakery: ['לחם','פית','לחמני','בגט','חלה','טוסט','קרואסון','עוגה','עוגי','בורקס','מאפה','בייגל','פוקצה','לאפה','קרקר','ביסקוויט'],
+    frozen: ['קפוא','גלידה','פיצה','בצק עלים','קרח','ארטיק'],
+    cleaning: ['סבון כלים','אקונומיקה','מגבונ','שקיות זבל','סמרטוט','מנקה','אבקת כביסה','מרכך כביסה','כלור','מטהר אוויר','ניקוי אסלה','מגבת נייר','ספוג כלים','נייר סופג','שקית זבל','נוזל כלים'],
+    hygiene: ['שמפו','מרכך שיער','סבון','משחת שיניים','מברשת שיניים','דאודורנט','קרם','טישו','טיטול','פד','נייר טואלט','תחבושות','סבון ידיים','קרם הגנה','בושם','מגבונים לחים','גילוח','קונדיציונר'],
+    drinks: ['מים','מיץ','קולה','סודה','בירה','יין','משק','קפה','תה','נס קפה','אנרג','סירופ','ספרייט','פאנטה'],
+    snacks: ['שוקולד','חטיף','במבה','ביסלי','צ\'יפס','ממתק','גומי','וופל','בוטנ','אגוז','קרמבו','פופקורן','גרעינים','פיצוחים','חטיף אנרגיה','חטיפי'],
+    spices: ['מלח','פלפל שחור','פפריקה','כמון','קארי','קינמון','רוטב','קטשופ','מיונז','חרדל','סוי','טחינה','סילאן','דבש','ריב','תבלין','אבקת שום','אבקת בצל'],
+    pantry: ['אורז','פסטה','קמח','סוכר','שימור','עדש','חומוס','קטני','שעוע','קוואקר','דגני בוקר','קורנפלקס','שמן','חומץ','רסק','אטרי','סולת','קינואה','בורגול','פתיתים','קוסקוס'],
+    produce: ['תפוח','בננ','תפוז','אגס','ענב','אבטיח','מלון','תות','אננס','קיווי','מנגו','אבוקדו','עגבני','מלפפון','גזר','בצל','שום','תפוח אדמה','תפוד','בטט','פלפל','חסה','כרוב','ברוקולי','כרובית','קישוא','חציל','תירס','פטריות','לימון','סלרי','כוסברה','פטרוזיל','נענע','שמיר','צנונית','ירק','פרי','ארטישוק','קלמנטינה','אפרסק','שזיף','דובדבן','רימון','אשכולית','פומלה','תרד','סלק','כרישה','רוקט','רוקולה','זנגביל']
+  };
+  var CATEGORY_GUESS_ORDER = ['dairy','meat','bakery','frozen','cleaning','hygiene','drinks','snacks','spices','pantry','produce'];
+  function guessCategory(name){
+    var n = (name || '').trim();
+    if (!n) return 'other';
+    var words = n.split(/\s+/).filter(Boolean);
+    for (var i=0;i<CATEGORY_GUESS_ORDER.length;i++){
+      var cat = CATEGORY_GUESS_ORDER[i];
+      var kws = CATEGORY_KEYWORDS[cat];
+      for (var j=0;j<kws.length;j++){
+        var kw = kws[j];
+        if (kw.indexOf(' ') !== -1) {
+          // multi-word phrase (e.g. "אבקת שום") - safe to match anywhere in the full text
+          if (n.indexOf(kw) !== -1) return cat;
+        } else {
+          // single word - only match whole words (either is a prefix of the other),
+          // never a substring buried inside an unrelated word (e.g. "טישו" inside "ארטישוק")
+          for (var w=0; w<words.length; w++){
+            if (words[w].indexOf(kw) === 0 || kw.indexOf(words[w]) === 0) return cat;
+          }
+        }
+      }
+    }
+    return 'other';
+  }
+
+  function registerIdentity(name){
+    var newId = (crypto.randomUUID ? crypto.randomUUID() : ('id-' + Date.now() + '-' + Math.random().toString(16).slice(2)));
+    return db.collection('meta').doc('config').get().then(function(metaDoc){
+      if (!metaDoc.exists) {
+        // first person -> head
+        return db.collection('meta').doc('config').set({
+          headMemberId: newId, familyName: 'קניות אילת 2026',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function(){
+          return db.collection('members').doc(newId).set({
+            name: name, status: 'approved', isHead: true,
+            joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }).then(function(){
+          memberId = newId; memberName = name; isHead = true;
+          localStorage.setItem(LS_MEMBER_ID, newId);
+          localStorage.setItem(LS_MEMBER_NAME, name);
+          watchOwnMembership();
+        });
+      } else {
+        return db.collection('members').doc(newId).set({
+          name: name, status: 'pending', isHead: false,
+          joinedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function(){
+          memberId = newId; memberName = name; isHead = false;
+          localStorage.setItem(LS_MEMBER_ID, newId);
+          localStorage.setItem(LS_MEMBER_NAME, name);
+          watchOwnMembership();
+        });
+      }
+    });
+  }
+
+  /* ---------- MAIN APP ---------- */
+  function startApp(){
+    showApp();
+    populateCategorySelect();
+    subscribeAll();
+    renderFamilyName();
+    updateInviteLink();
+  }
+
+  function populateCategorySelect(){
+    var sel = $('itemCategorySelect');
+    if (sel.options.length) return;
+    CATEGORIES.forEach(function(c){
+      var o = document.createElement('option');
+      o.value = c.id; o.textContent = c.emoji + ' ' + c.label;
+      sel.appendChild(o);
+    });
+  }
+
+  function renderFamilyName(){
+    db.collection('meta').doc('config').get().then(function(d){
+      if (d.exists && d.data().familyName) $('familyNameLabel').textContent = d.data().familyName;
+    }).catch(function(){});
+  }
+
+  function updateInviteLink(){
+    $('inviteLinkBox').textContent = inviteLink();
+  }
+
+  function subscribeAll(){
+    listeners.push(db.collection('members').orderBy('joinedAt', 'asc').onSnapshot(function(snap){
+      state.members = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderFamilyTab();
+      updatePendingBadge();
+    }, genErr('משתתפים')));
+
+    listeners.push(db.collection('items').onSnapshot(function(snap){
+      state.items = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderItems();
+      renderShoppingTab();
+    }, genErr('רשימה')));
+
+    listeners.push(db.collection('sessions').onSnapshot(function(snap){
+      state.sessions = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderShoppingTab();
+    }, genErr('סטטוס')));
+
+    listeners.push(db.collection('history').orderBy('endedAt', 'desc').limit(40).onSnapshot(function(snap){
+      state.history = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      renderHistory();
+    }, genErr('היסטוריה')));
+  }
+
+  function genErr(label){
+    return function(err){ toast('שגיאת ' + label + ': ' + err.message); };
+  }
+
+  /* ---------- RENDER: SHOPPING TAB ---------- */
+  function renderShoppingTab(){
+    var el = $('shoppingContent');
+    if (!el) return;
+    var mine = state.sessions.find(function(s){ return s.id === memberId; });
+    var iAmShopping = !!(mine && mine.active);
+    var others = state.sessions.filter(function(s){ return s.active && s.id !== memberId; });
+
+    // tab bar dot: show if anyone at all is currently shopping
+    var anyoneActive = iAmShopping || others.length > 0;
+    $('shoppingBadge').innerHTML = anyoneActive ? '<span class="tab-dot"></span>' : '';
+
+    if (!iAmShopping) {
+      var othersHtml = others.length
+        ? '<div class="status-active">🛍️ בסופר עכשיו: ' + others.map(function(s){ return esc(s.memberName); }).join(', ') + '</div>'
+        : '';
+      el.innerHTML =
+        '<div class="shop-intro">' +
+          '<div class="emoji">🛍️</div>' +
+          '<h2>מוכנים לצאת לקניות?</h2>' +
+          '<p>לחצו כשאתם יוצאים לסופר - כל הטיול ידע, ותקבלו כאן מסך קנייה נוח לסימון מוצרים תוך כדי ההליכה בין המדפים.</p>' +
+          '<button class="btn btn-primary" data-action="start-shopping">🛍️ אני בסופר - התחלת קנייה</button>' +
+        '</div>' + othersHtml;
+      return;
+    }
+
+    // Shopping mode is active for me: focused, big-target checklist grouped by category
+    var total = state.items.length;
+    var done = state.items.filter(function(i){ return i.checked; }).length;
+
+    var byCat = {};
+    state.items.forEach(function(it){
+      var c = it.category && CAT_MAP[it.category] ? it.category : 'other';
+      (byCat[c] = byCat[c] || []).push(it);
+    });
+
+    var listHtml = '';
+    if (!total) {
+      listHtml = '<div class="empty-state"><div class="e">🧺</div>הרשימה ריקה - אין מה לקנות כרגע</div>';
+    } else {
+      CATEGORIES.forEach(function(cat){
+        var arr = byCat[cat.id];
+        if (!arr || !arr.length) return;
+        arr.sort(function(a,b){
+          if (!!a.checked !== !!b.checked) return a.checked ? 1 : -1;
+          return (a.name||'').localeCompare(b.name||'', 'he');
+        });
+        var doneCount = arr.filter(function(i){ return i.checked; }).length;
+        listHtml += '<div class="cat-group"><div class="cat-head"><span class="l">' + cat.emoji + ' ' + esc(cat.label) + '</span><span class="count">' + doneCount + '/' + arr.length + '</span></div>';
+        arr.forEach(function(it){
+          listHtml += '<div class="shop-item-row' + (it.checked ? ' checked' : '') + '" data-action="toggle-item" data-id="' + it.id + '" data-checked="' + (it.checked?1:0) + '">' +
+            '<div class="checkbox' + (it.checked ? ' on' : '') + '">' + (it.checked ? '✓' : '') + '</div>' +
+            '<div class="item-info"><div class="item-name">' + esc(it.name) + (it.quantity ? ' <span style="color:var(--muted);font-weight:500;">· ' + esc(it.quantity) + '</span>' : '') + '</div></div>' +
+            '</div>';
+        });
+        listHtml += '</div>';
+      });
+    }
+
+    el.innerHTML =
+      '<div class="shop-progress-bar"><span class="shop-progress-text">' + done + '<span>/' + total + ' נאספו</span></span>' +
+        '<button class="shop-finish-btn" data-action="finish-shopping">✅ סיימתי, יצאתי מהסופר</button></div>' +
+      listHtml +
+      (total ? '<button class="btn btn-accent shop-finish-bottom" data-action="finish-shopping">✅ סיימתי, יצאתי מהסופר</button>' : '');
+  }
+
+  /* ---------- RENDER: ITEMS ---------- */
+  function renderItems(){
+    var container = $('itemsContainer');
+    if (!state.items.length) {
+      container.innerHTML = '<div class="empty-state"><div class="e">🧺</div>רשימת הקניות ריקה<br>הוסיפו מוצר למעלה</div>';
+      return;
+    }
+    var byCat = {};
+    state.items.forEach(function(it){
+      var c = it.category && CAT_MAP[it.category] ? it.category : 'other';
+      (byCat[c] = byCat[c] || []).push(it);
+    });
+    var html = '';
+    CATEGORIES.forEach(function(cat){
+      var arr = byCat[cat.id];
+      if (!arr || !arr.length) return;
+      arr.sort(function(a,b){
+        if (!!a.checked !== !!b.checked) return a.checked ? 1 : -1;
+        return (a.name||'').localeCompare(b.name||'', 'he');
+      });
+      var doneCount = arr.filter(function(i){ return i.checked; }).length;
+      html += '<div class="cat-group"><div class="cat-head"><span class="l">' + cat.emoji + ' ' + esc(cat.label) + '</span><span class="count">' + doneCount + '/' + arr.length + '</span></div>';
+      arr.forEach(function(it){
+        html += '<div class="item-row' + (it.checked ? ' checked' : '') + '">' +
+          '<div class="checkbox' + (it.checked ? ' on' : '') + '" data-action="toggle-item" data-id="' + it.id + '" data-checked="' + (it.checked?1:0) + '">' + (it.checked ? '✓' : '') + '</div>' +
+          '<div class="item-info"><div class="item-name">' + esc(it.name) + (it.quantity ? ' <span style="color:var(--muted);font-weight:500;">· ' + esc(it.quantity) + '</span>' : '') + '</div>' +
+          '<div class="item-meta">נוסף ע״י ' + esc(it.addedByName || '') + '</div></div>' +
+          '<button class="item-del" data-action="delete-item" data-id="' + it.id + '">✕</button>' +
+          '</div>';
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
+  }
+
+  /* ---------- RENDER: HISTORY ---------- */
+  function fmtDate(ts){
+    if (!ts || !ts.toDate) return 'עכשיו';
+    try {
+      return ts.toDate().toLocaleString('he-IL', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+    } catch(e){ return ''; }
+  }
+  function renderHistory(){
+    var c = $('historyContainer');
+    if (!state.history.length) {
+      c.innerHTML = '<div class="empty-state"><div class="e">🕓</div>עוד אין היסטוריית קניות<br>היא תופיע כאן אחרי הקנייה הראשונה</div>';
+      return;
+    }
+    var html = '';
+    state.history.forEach(function(h){
+      html += '<div class="hist-item"><div class="hh"><span class="who">🛍️ ' + esc(h.memberName) + '</span><span class="when">' + fmtDate(h.endedAt) + '</span></div>';
+      html += '<div class="hist-tags">';
+      (h.items || []).forEach(function(it){
+        var cat = CAT_MAP[it.category] || CAT_MAP.other;
+        html += '<span class="hist-tag">' + cat.emoji + ' ' + esc(it.name) + (it.quantity ? ' (' + esc(it.quantity) + ')' : '') + '</span>';
+      });
+      if (!h.items || !h.items.length) html += '<span class="hist-tag">לא נקנו פריטים</span>';
+      html += '</div></div>';
+    });
+    c.innerHTML = html;
+  }
+
+  /* ---------- RENDER: PARTICIPANTS ---------- */
+  function updatePendingBadge(){
+    var pendingCount = state.members.filter(function(m){ return m.status === 'pending'; }).length;
+    $('pendingBadge').innerHTML = (isHead && pendingCount) ? '<span class="tab-badge">' + pendingCount + '</span>' : '';
+  }
+
+  function renderFamilyTab(){
+    var c = $('familyContainer');
+    var pending = state.members.filter(function(m){ return m.status === 'pending'; });
+    var approved = state.members.filter(function(m){ return m.status === 'approved'; });
+    var html = '';
+
+    if (isHead) {
+      html += '<div class="section-title">קישור הזמנה</div>';
+      html += '<div class="link-box" id="familyInviteLinkBox">' + esc(inviteLink()) + '</div>';
+      html += '<button class="btn btn-primary btn-sm" data-action="copy-invite" style="width:auto;margin-bottom:18px;">העתק קישור</button>';
+
+      if (pending.length) {
+        html += '<div class="section-title">בקשות ממתינות</div>';
+        pending.forEach(function(m){
+          html += '<div class="member-row"><span class="mname">' + esc(m.name) + ' <span class="badge badge-pending">ממתין</span></span>' +
+            '<span class="member-actions"><button class="btn btn-primary btn-sm" data-action="approve-member" data-id="' + m.id + '">אשר</button>' +
+            '<button class="btn btn-danger btn-sm" data-action="reject-member" data-id="' + m.id + '">דחה</button></span></div>';
+        });
+      }
+    }
+
+    html += '<div class="section-title">משתתפי הטיול</div>';
+    approved.forEach(function(m){
+      html += '<div class="member-row"><span class="mname">' + esc(m.name) + (m.isHead ? ' <span class="badge badge-head">מארגן/ת</span>' : '') + (m.id === memberId ? ' (זה את.ה)' : '') + '</span>';
+      if (isHead && m.id !== memberId) {
+        html += '<button class="btn btn-ghost btn-sm" data-action="remove-member" data-id="' + m.id + '">הסר</button>';
+      }
+      html += '</div>';
+    });
+    c.innerHTML = html;
+  }
+
+  /* ---------- ACTIONS ---------- */
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('[data-action]');
+    if (!el) return;
+    var action = el.dataset.action;
+    var id = el.dataset.id;
+
+    if (action === 'toggle-theme') toggleTheme();
+    else if (action === 'open-help') { updateInviteLink(); $('helpModal').classList.add('open'); }
+    else if (action === 'close-help') $('helpModal').classList.remove('open');
+    else if (action === 'switch-tab') switchTab(el.dataset.tab);
+    else if (action === 'start-shopping') startShopping();
+    else if (action === 'finish-shopping') finishShopping();
+    else if (action === 'toggle-item') toggleItem(id, el.dataset.checked === '1');
+    else if (action === 'delete-item') deleteItem(id);
+    else if (action === 'approve-member') db.collection('members').doc(id).update({status:'approved', approvedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(function(){ toast('אושר בהצלחה'); });
+    else if (action === 'reject-member') db.collection('members').doc(id).update({status:'rejected'}).then(function(){ toast('נדחה'); });
+    else if (action === 'remove-member') { if (confirm('להסיר את המשתתף.ת הזה מהטיול?')) db.collection('members').doc(id).delete(); }
+    else if (action === 'copy-invite') copyInvite();
+    else if (action === 'copy-rules') copyRules(el);
+    else if (action === 'retry-connect') location.reload();
+    else if (action === 'add-back') {
+      addStep = 1;
+      $('itemNameInput').value = pendingItemName;
+      $('addDetailsRow').style.display = 'none';
+      $('addNameRow').style.display = 'flex';
+      $('itemNameInput').focus();
+      $('itemNameInput').select();
+    }
+  });
+
+  function switchTab(tab){
+    activeTab = tab;
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    $('panel-' + tab).classList.add('active');
+    document.querySelectorAll('nav.tabbar button').forEach(function(b){ b.classList.toggle('active', b.dataset.tab === tab); });
+  }
+
+  function startShopping(){
+    var ref = db.collection('sessions').doc(memberId);
+    ref.set({active:true, memberName: memberName, startedAt: firebase.firestore.FieldValue.serverTimestamp()}, {merge:true})
+      .then(function(){ toast('בהצלחה בקניות! 🛍️'); });
+  }
+
+  function finishShopping(){
+    var ref = db.collection('sessions').doc(memberId);
+    var checkedItems = state.items.filter(function(i){ return i.checked; });
+    var batch = db.batch();
+    checkedItems.forEach(function(it){ batch.delete(db.collection('items').doc(it.id)); });
+    var historyRef = db.collection('history').doc();
+    batch.set(historyRef, {
+      memberId: memberId, memberName: memberName,
+      endedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      items: checkedItems.map(function(i){ return {name:i.name, category:i.category, quantity:i.quantity||''}; }),
+      count: checkedItems.length
+    });
+    batch.update(ref, {active:false, endedAt: firebase.firestore.FieldValue.serverTimestamp()});
+    batch.commit().then(function(){
+      toast(checkedItems.length ? ('הקנייה הסתיימה! ' + checkedItems.length + ' מוצרים נוספו להיסטוריה') : 'הקנייה הסתיימה');
+    }).catch(function(err){ toast('שגיאה: ' + err.message); });
+  }
+
+  function toggleItem(id, wasChecked){
+    var next = !wasChecked;
+    db.collection('items').doc(id).update({
+      checked: next,
+      checkedBy: next ? memberName : firebase.firestore.FieldValue.delete(),
+      checkedAt: next ? firebase.firestore.FieldValue.serverTimestamp() : firebase.firestore.FieldValue.delete()
+    });
+  }
+
+  function deleteItem(id){
+    db.collection('items').doc(id).delete();
+  }
+
+  function copyInvite(){
+    var link = inviteLink();
+    copyText(link, 'הקישור הועתק! שלחו אותו למשתתפי הטיול 🧳');
+  }
+  function copyRules(el){
+    var text = "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /{document=**} {\n      allow read, write: if true;\n    }\n  }\n}";
+    copyText(text, 'הועתק');
+  }
+  function copyText(text, msg){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ toast(msg); }).catch(function(){ fallbackCopy(text, msg); });
+    } else fallbackCopy(text, msg);
+  }
+  function fallbackCopy(text, msg){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast(msg); } catch(e){ toast('לא הצלחנו להעתיק — העתיקו ידנית'); }
+    document.body.removeChild(ta);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
