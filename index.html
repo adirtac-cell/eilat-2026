@@ -17,6 +17,18 @@
 section{margin:24px 0} h2{font-size:24px;margin:0 0 12px}.day{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 5px 18px #18323a08}.dayhead{display:flex;justify-content:space-between;gap:10px;align-items:center}.day h3{margin:0;font-size:19px}.date{color:var(--muted);font-size:13px}.meal{padding:14px 0;border-top:1px solid var(--line)}.meal:first-of-type{border-top:0}.meal h4{margin:0 0 8px;font-size:16px}.meal ul{margin:0;padding-right:20px;line-height:1.8}.tag{display:inline-block;background:#fff4d6;color:#8a5a00;border-radius:999px;padding:4px 9px;font-size:12px;margin-right:6px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{background:white;border:1px solid var(--line);border-radius:18px;padding:16px}.tile .icon{font-size:27px}.tile h3{margin:7px 0 5px}.tile p{margin:0;color:var(--muted);line-height:1.5}
 .note{background:#e8f8fb;border:1px solid #bde8ef;border-radius:16px;padding:14px;color:#175761}
+.villa-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 5px 18px #18323a08}
+.villa-card h3{margin:0 0 4px;font-size:19px}
+.villa-card .addr{color:var(--muted);font-size:14px;margin:0 0 14px}
+.villa-video{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;margin-bottom:14px}
+.villa-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.villa-links{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.villa-links a{background:var(--accent);color:#fff;text-decoration:none;padding:12px 16px;border-radius:14px;font-weight:700;font-size:14px}
+.villa-links a.alt{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.contact-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid var(--line);font-size:14.5px}
+.contact-row:first-child{border-top:0}
+.contact-row .role{color:var(--muted)}
+.contact-row a{color:var(--accent);text-decoration:none;font-weight:700;direction:ltr;display:inline-block}
 footer{text-align:center;color:var(--muted);font-size:13px;padding:25px 0 35px}
 @media(max-width:520px){.wrap{padding:12px}.hero h1{font-size:30px}.nav{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
 </style>
@@ -87,7 +99,18 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:25px 0 35px}
 </section>
 
 <section id="villa">
-<h2>🏡 הווילה</h2><div class="note">פרטי הווילה, כתובת, הוראות הגעה וכללי הבית יתווספו כאן.</div>
+<h2>🏡 הווילה</h2>
+<div class="villa-card">
+  <h3>וילה קשת</h3>
+  <p class="addr">לוטוס 14, אילת</p>
+  <div class="villa-video"><iframe src="https://www.youtube.com/embed/sKX12IL3CeA" title="סיור בווילה" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+  <div class="villa-links">
+    <a href="https://waze.com/ul?q=%D7%9C%D7%95%D7%98%D7%95%D7%A1%2014%20%D7%90%D7%99%D7%9C%D7%AA&navigate=yes" target="_blank" rel="noopener">🧭 ניווט ב-Waze</a>
+    <a class="alt" href="https://villavibes.co.il/Villas/villa-keshet" target="_blank" rel="noopener">🔗 עמוד הווילה</a>
+  </div>
+  <div class="contact-row"><span class="role">מנהל · שי</span><a href="tel:0546665870">054-666-5870</a></div>
+  <div class="contact-row"><span class="role">מנהל · תום</span><a href="tel:0533333008">053-333-3008</a></div>
+</div>
 </section>
 
 <section id="expenses">
