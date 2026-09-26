@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="trip-data.js"></script>
 <style>
   :root {
     --bg: #f5f7f8;
@@ -154,6 +155,14 @@
   }
   .note a { color: var(--primary-dark); font-weight:700; text-decoration:none; }
 
+  .today-badge { display:inline-block; background: var(--accent-soft); color: var(--accent-dark); border-radius:999px; padding:5px 12px; font-size:12.5px; font-weight:700; margin-inline-start:8px; }
+  .fulllinks { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+  .fulllinks a {
+    background: var(--surface); border:1px solid var(--border); color: var(--primary-dark); text-decoration:none;
+    font-weight:700; font-size:14px; padding:12px 16px; border-radius:14px; flex:1; text-align:center; min-width:140px;
+  }
+  .empty-mini { color: var(--muted); margin:0; padding:4px 2px; }
+
   .villa-card { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow); }
   .villa-card h3 { margin:0 0 4px; font-size:18.5px; }
   .villa-card .addr { color: var(--muted); font-size:14px; margin:0 0 14px; }
@@ -200,57 +209,16 @@
 </div>
 
 <nav class="pillnav">
-  <a href="#schedule">📅 לו״ז</a>
-  <a href="#food">🍴 אוכל</a>
+  <a href="schedule.html">📅 לו״ז מלא</a>
+  <a href="activities.html">🏖️ בילויים</a>
   <a href="shopping.html">🛒 קניות</a>
-  <a href="#activities">🏖️ בילויים</a>
   <a href="#villa">🏡 הווילה</a>
   <a href="expenses.html">💰 הוצאות</a>
 </nav>
 
-<section id="schedule">
-<h2>📅 הלו״ז</h2>
-<div class="day"><div class="dayhead"><h3>רביעי · 30/9</h3><span class="date">יום הגעה</span></div>
-  <div class="meal"><h4>15:00 🏡 כניסה לווילה</h4><ul><li>התארגנות</li><li>זמן חופשי</li></ul></div>
-  <div class="meal"><h4>ערב 🍕 הזמנה מבחוץ</h4><ul><li>אסיאתי / המבורגרים / פיצות</li></ul></div>
-</div>
-<div class="day"><div class="dayhead"><h3>חמישי · 1/10</h3></div>
-  <div class="meal"><h4>בוקר 🍳</h4><p>ארוחת בוקר ישראלית</p></div>
-  <div class="meal"><h4>צהריים 🍴</h4><p class="date">בהמשך</p></div>
-  <div class="meal"><h4>ערב 🔥</h4><p>על האש</p></div>
-</div>
-<div class="day"><div class="dayhead"><h3>שישי · 2/10</h3></div>
-  <div class="meal"><h4>בוקר 🍳</h4><p>אותו קונספט כמו חמישי</p></div>
-  <div class="meal"><h4>צהריים 🍴</h4><p class="date">בהמשך</p></div>
-  <div class="meal"><h4>ערב 🍽️</h4><p>ארוחת שישי גדולה</p></div>
-</div>
-<div class="day"><div class="dayhead"><h3>שבת · 3/10</h3><span class="date">יום יציאה</span></div>
-  <div class="meal"><h4>בוקר 🥐</h4><p>בוקר שבת</p></div>
-  <div class="meal"><h4>16:00 🚪 יציאה מהווילה</h4></div>
-</div>
-</section>
-
-<section id="food">
-<h2>🍴 תפריט</h2>
-<div class="day"><h3>🍕 רביעי ערב · הזמנה מבחוץ</h3><ul><li>אסיאתי</li><li>המבורגרים</li><li>פיצות</li></ul></div>
-
-<div class="day"><h3>🍳 חמישי בוקר</h3><ul><li>שקשוקות</li><li>גבינות</li><li>טונה</li><li>תירס</li><li>לחמים</li><li>סלטים</li><li>חביתות / ביצים קשות</li></ul></div>
-
-<div class="day"><h3>🔥 חמישי ערב · על האש</h3><ul><li>פרגיות</li><li>קבב</li><li>כנפיים</li><li>נקניקיות לילדים</li><li>סטייקים / אנטריקוט</li><li>המבורגר</li><li>תפוחי אדמה</li><li>תירס</li><li>פיתות</li><li>צ'יפס</li><li>סלט ירקות, כרוב, מטבוחה, חצילים</li><li>טחינה, חומוס, עמבה, חמוצים</li><li>אבטיח / מלון, גלידה ומשהו מתוק לילדים</li><li>מים, שתייה קלה, בירה, יין</li></ul></div>
-
-<div class="day"><h3>🍳 שישי בוקר</h3><p>אותו קונספט כמו חמישי:</p><ul><li>שקשוקות</li><li>גבינות</li><li>טונה</li><li>תירס</li><li>לחמים</li><li>סלטים</li><li>חביתות / ביצים קשות</li></ul></div>
-
-<div class="day"><h3>🍽️ שישי ערב · ארוחת שישי</h3><ul><li>דגים מרוקאים</li><li>משה בתיבה</li><li>סלטים</li><li>פשטידת פטריות</li><li>בשר בתנור</li><li>עוף בתנור</li><li>פסטה בולונז</li><li>אורז</li><li>תפוחי אדמה בתנור</li></ul></div>
-
-<div class="day"><h3>🥐 שבת בוקר</h3><ul><li>קובנות</li><li>ביצים קשות</li><li>עגבניות</li><li>בורקס בתנור</li><li>גבינות</li><li>ירקות</li></ul></div>
-</section>
-
-<section id="shopping">
-<h2>🛒 קניות</h2><div class="note">רשימת קניות משותפת לכל המשתתפים, מתעדכנת בזמן אמת. <a href="shopping.html">פתחו את אפליקציית הקניות ←</a></div>
-</section>
-
-<section id="activities">
-<h2>🏖️ בילויים</h2><div class="note">נבנה בהמשך — כרגע לא נקבעו אטרקציות.</div>
+<section id="today">
+<h2 id="todayTitle">📅 היום</h2>
+<div id="todayContent"></div>
 </section>
 
 <section id="villa">
@@ -266,10 +234,6 @@
   <div class="contact-row"><span class="role">מנהל · שי</span><a href="tel:0546665870">054-666-5870</a></div>
   <div class="contact-row"><span class="role">מנהל · תום</span><a href="tel:0533333008">053-333-3008</a></div>
 </div>
-</section>
-
-<section id="expenses">
-<h2>💰 הוצאות</h2><div class="note">מעקב הוצאות משותף לארבע המשפחות, כולל חלוקה והתחשבנות בזמן אמת. <a href="expenses.html">פתחו את אפליקציית ההוצאות ←</a></div>
 </section>
 
 <footer>אילת 2026 · גרסה ראשונה 🌴</footer>
@@ -323,9 +287,71 @@
     onScroll();
   }
 
+  function esc(s){
+    return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function renderDayCard(day){
+    var html = '<div class="day"><div class="dayhead"><h3>' + esc(day.label) + '</h3>' +
+      (day.note ? '<span class="date">' + esc(day.note) + '</span>' : '') + '</div>';
+    day.events.forEach(function(ev){
+      html += '<div class="meal"><h4>' + esc(ev.time) + ' ' + esc(ev.title) + '</h4>';
+      if (ev.items && ev.items.length) html += '<ul>' + ev.items.map(function(i){ return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>';
+      else if (ev.note) html += '<p class="date">' + esc(ev.note) + '</p>';
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function renderActivitiesCard(dateKey){
+    var acts = activitiesForDate(dateKey);
+    var html = '<div class="day"><h3 style="margin-bottom:10px;">🏖️ בילויים</h3>';
+    if (!acts.length) html += '<p class="empty-mini">טרם נקבעו אטרקציות ליום הזה.</p>';
+    else {
+      html += '<ul style="margin:0;padding-inline-start:20px;line-height:1.8;">' + acts.map(function(a){
+        return '<li><b>' + esc(a.time || '') + '</b> ' + esc(a.title) + (a.description ? ' — ' + esc(a.description) : '') + '</li>';
+      }).join('') + '</ul>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function fullLinksRow(){
+    return '<div class="fulllinks"><a href="schedule.html">📅 ללו״ז המלא ←</a><a href="activities.html">🏖️ לכל הבילויים ←</a></div>';
+  }
+
+  function renderToday(){
+    var titleEl = document.getElementById('todayTitle');
+    var container = document.getElementById('todayContent');
+    var now = new Date();
+    var tripStart = new Date(2026, 8, 30, 0, 0, 0);
+    var tripEnd = new Date(2026, 9, 3, 23, 59, 59);
+    var todayKey = tripDateKey(now);
+    var day = findTripDay(todayKey);
+
+    if (day) {
+      titleEl.innerHTML = '📅 היום<span class="today-badge">' + esc(day.label) + '</span>';
+      container.innerHTML = renderDayCard(day) + renderActivitiesCard(day.date) + fullLinksRow();
+    } else if (now < tripStart) {
+      var first = TRIP_DAYS[0];
+      titleEl.textContent = '📅 מה מחכה לנו';
+      container.innerHTML =
+        '<div class="note" style="margin-bottom:14px;">הטיול עוד לא התחיל — הנה תזכורת ליום הראשון שלנו 🌴</div>' +
+        renderDayCard(first) + renderActivitiesCard(first.date) + fullLinksRow();
+    } else {
+      titleEl.textContent = '📅 הטיול הסתיים';
+      container.innerHTML =
+        '<div class="note" style="margin-bottom:14px;">מקווים שנהניתם בטיול! 🌴</div>' + fullLinksRow();
+    }
+  }
+
   initTheme();
   renderCountdown();
   initHeaderScroll();
+  renderToday();
 })();
 </script>
 </body>
