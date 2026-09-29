@@ -163,6 +163,18 @@
   }
   .empty-mini { color: var(--muted); margin:0; padding:4px 2px; }
 
+  .quicklink-card {
+    background: linear-gradient(135deg, var(--accent-soft), var(--surface));
+    border:1px solid var(--border); border-radius: var(--radius); padding:20px;
+    display:flex; align-items:center; gap:14px; box-shadow: var(--shadow); text-decoration:none; color:inherit;
+  }
+  .quicklink-card .qc-icon { font-size:40px; flex-shrink:0; }
+  .quicklink-card .qc-text { flex:1; min-width:0; }
+  .quicklink-card h3 { margin:0 0 4px; font-size:17px; }
+  .quicklink-card p { margin:0; color: var(--ink-soft); font-size:13.5px; line-height:1.5; }
+  .quicklink-card .qc-btn { background: var(--primary); color:#fff; padding:10px 16px; border-radius:12px; font-weight:700; font-size:13.5px; white-space:nowrap; flex-shrink:0; }
+  @media(max-width:520px){ .quicklink-card { flex-wrap:wrap; text-align:center; justify-content:center; } .quicklink-card .qc-btn { width:100%; text-align:center; } }
+
   .villa-card { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow); }
   .villa-card h3 { margin:0 0 4px; font-size:18.5px; }
   .villa-card .addr { color: var(--muted); font-size:14px; margin:0 0 14px; }
@@ -220,6 +232,17 @@
 <section id="today">
 <h2 id="todayTitle">📅 היום</h2>
 <div id="todayContent"></div>
+</section>
+
+<section id="packing-cta">
+<a class="quicklink-card" href="packing.html">
+  <span class="qc-icon">🧳</span>
+  <span class="qc-text">
+    <h3>מה לוקחים לטיול?</h3>
+    <p>רשימת ציוד אישית לכל אחד ואחת — מסמנים במכשיר שלכם, ואפשר גם להוסיף פריטים משלכם.</p>
+  </span>
+  <span class="qc-btn">לרשימה ←</span>
+</a>
 </section>
 
 <section id="villa">
