@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b7285">
+<title>מה לוקחים · אילת 2026</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A7%B3%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f7f8; --surface: #FFFFFF; --surface-2: #e6ecee; --ink: #18323a; --ink-soft: #45585e; --muted: #6b7d83;
+    --border: #e6ecee; --primary: #0b7285; --primary-dark: #085a68; --primary-soft: #e8f8fb;
+    --accent: #f59f00; --accent-dark: #c07f22; --accent-soft: #fff4d6;
+    --shadow: 0 5px 18px rgba(24,50,58,0.08); --radius: 20px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#121b1e; --surface:#17262a; --surface-2:#1c2e32; --ink:#eaf4f5; --ink-soft:#b9cdd1; --muted:#8aa0a5;
+      --border:#26383c; --primary:#4fb3c4; --primary-dark:#7fcbd8; --primary-soft:#1c3438;
+      --accent:#f0b75b; --accent-dark:#f6cd8b; --accent-soft:#3a2f19; --shadow:0 4px 18px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#121b1e; --surface:#17262a; --surface-2:#1c2e32; --ink:#eaf4f5; --ink-soft:#b9cdd1; --muted:#8aa0a5;
+    --border:#26383c; --primary:#4fb3c4; --primary-dark:#7fcbd8; --primary-soft:#1c3438;
+    --accent:#f0b75b; --accent-dark:#f6cd8b; --accent-soft:#3a2f19; --shadow:0 4px 18px rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body { background: var(--bg); color: var(--ink); font-family:'Heebo',system-ui,-apple-system,Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color: inherit; }
+  button { font-family: inherit; }
+  input { font-family: inherit; }
+  .wrap { max-width: 720px; margin: auto; padding: 0 16px 40px; }
+
+  header.app-header {
+    position: sticky; top:0; z-index: 20; background: var(--bg);
+    display:flex; align-items:center; justify-content:space-between;
+    padding: calc(14px + env(safe-area-inset-top)) 16px 12px; margin: 0 -16px;
+    border-bottom: 1px solid var(--border);
+  }
+  header.app-header .brand { display:flex; align-items:center; gap:8px; }
+  header.app-header .brand .emoji { font-size:20px; }
+  header.app-header .brand h1 { font-size:16px; margin:0; font-weight:800; }
+  .header-actions { display:flex; align-items:center; gap:8px; }
+  .switcher { display:flex; gap:6px; background: var(--surface); border:1px solid var(--border); border-radius:999px; padding:3px; }
+  .switch-btn { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; text-decoration:none; color: var(--ink-soft); }
+  .switch-btn.active { background: var(--primary); color:#fff; }
+  .icon-btn { width:34px; height:34px; border-radius:50%; border:1px solid var(--border); background: var(--surface); display:flex; align-items:center; justify-content:center; font-size:15px; cursor:pointer; color: var(--ink-soft); }
+
+  .backlink { display:inline-flex; align-items:center; gap:6px; color: var(--primary-dark); text-decoration:none; font-weight:700; font-size:14.5px; margin:18px 0 6px; }
+  h2 { font-size:24px; margin:6px 0 4px; }
+  .subtitle { color: var(--muted); font-size:13.5px; margin:0 0 16px; }
+
+  .progress-bar {
+    background: var(--primary-soft); border:1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .progress-bar .lbl { font-size:13.5px; color: var(--primary-dark); font-weight:600; }
+  .progress-bar .val { font-size:20px; font-weight:800; color: var(--primary-dark); }
+
+  .cat-card { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:16px 18px; margin:12px 0; box-shadow: var(--shadow); }
+  .cat-card h3 { margin:0 0 4px; font-size:17.5px; display:flex; align-items:center; justify-content:space-between; }
+  .cat-card .count { font-size:12.5px; color: var(--muted); font-weight:600; }
+  .pack-row {
+    display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--border);
+  }
+  .pack-row:first-of-type { border-top:0; margin-top:8px; }
+  .checkbox {
+    width:24px; height:24px; min-width:24px; border-radius:7px; border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; background: var(--bg); font-size:15px; color:#fff;
+  }
+  .checkbox.on { background: var(--primary); border-color: var(--primary); }
+  .pack-row .txt { flex:1; font-size:15px; }
+  .pack-row.checked .txt { text-decoration: line-through; color: var(--muted); }
+  .pack-row .del { background:none; border:none; color: var(--muted); font-size:16px; cursor:pointer; padding:4px 6px; }
+
+  .add-row { display:flex; gap:8px; margin-top:12px; }
+  .add-row input {
+    flex:1; border:1px solid var(--border); border-radius:10px; padding:10px 12px; background: var(--bg); color: var(--ink); font-size:14.5px; outline:none; min-width:0;
+  }
+  .add-row input:focus { border-color: var(--primary); }
+  .add-row button {
+    background: var(--primary); color:#fff; border:none; border-radius:10px; padding:0 16px; font-weight:700; font-size:18px; cursor:pointer;
+  }
+
+  footer { text-align:center; color: var(--muted); font-size:13px; padding:25px 0 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app-header">
+    <div class="brand"><span class="emoji">🧳</span><h1>מה לוקחים</h1></div>
+    <div class="header-actions">
+      <div class="switcher">
+        <a class="switch-btn" href="index.html" title="בית">🏠</a>
+        <a class="switch-btn" href="shopping.html" title="קניות">🛒</a>
+        <a class="switch-btn" href="expenses.html" title="הוצאות">💰</a>
+      </div>
+      <button class="icon-btn" data-action="toggle-theme" title="ערכת נושא">🌓</button>
+    </div>
+  </header>
+
+  <a class="backlink" href="index.html">→ חזרה לעמוד הבית</a>
+  <h2>🧳 מה לוקחים לטיול</h2>
+  <p class="subtitle">רשימה אישית — הסימונים נשמרים רק במכשיר שלכם, כל אחד.ת מסמנ.ת לעצמו.ה. אפשר גם להוסיף פריטים משלכם בכל קטגוריה.</p>
+
+  <div class="progress-bar"><span class="lbl">ארזתם</span><span class="val" id="progressVal">0/0</span></div>
+
+  <div id="categoriesContainer"></div>
+
+  <footer>אילת 2026 · גרסה ראשונה 🌴</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var LS_THEME = 'eilat2026_theme_v1';
+  var LS_PACKING = 'eilat2026_packing_v1';
+
+  var CATEGORIES = [
+    { id:'pool',    emoji:'🏖️', label:'ים ובריכה', items:['בגדי ים','מגבות חוף','קרם הגנה','כובעים ומשקפי שמש','משחקי בריכה לילדים','מצופים'] },
+    { id:'health',  emoji:'🧴', label:'היגיינה ובריאות', items:['ערכת עזרה ראשונה','תרופות','דוחה יתושים','מברשת שיניים','בושם','דאודורנט'] },
+    { id:'fun',     emoji:'🎮', label:'בילוי ומשחקים', items:['משחקי קופסא','קלפים',"רמקול בלוטות'",'כדורים / משחקי מים'] },
+    { id:'electronics', emoji:'🔌', label:'אלקטרוניקה', items:['מטענים וכבלים','פאוור בנק','מצלמה'] },
+    { id:'kids',    emoji:'👶', label:'ציוד לילדים', items:['חטיפים ואוכל לדרך','עגלה / כיסא בטיחות ברכב'] },
+    { id:'kitchen', emoji:'🍽️', label:'מטבח', items:['צידנית','כלי מטבח (מיוחדים)'] }
+  ];
+
+  function $(id){ return document.getElementById(id); }
+  function esc(s){
+    return String(s === undefined || s === null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  /* ---------- THEME ---------- */
+  function initTheme(){
+    var saved = localStorage.getItem(LS_THEME);
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  }
+  function toggleTheme(){
+    var cur = document.documentElement.getAttribute('data-theme');
+    var sysDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var next;
+    if (!cur) next = sysDark ? 'light' : 'dark';
+    else if (cur === 'dark') next = 'light';
+    else next = 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem(LS_THEME, next);
+  }
+
+  /* ---------- STORAGE ---------- */
+  function loadState(){
+    try {
+      var raw = localStorage.getItem(LS_PACKING);
+      var parsed = raw ? JSON.parse(raw) : null;
+      return { checked: (parsed && parsed.checked) || {}, custom: (parsed && parsed.custom) || {} };
+    } catch (e) { return { checked: {}, custom: {} }; }
+  }
+  function saveState(state){
+    try { localStorage.setItem(LS_PACKING, JSON.stringify(state)); } catch (e) {}
+  }
+  var state = loadState();
+
+  function itemKey(catId, text){ return catId + '::' + text; }
+
+  /* ---------- RENDER ---------- */
+  function render(){
+    var container = $('categoriesContainer');
+    var html = '';
+    var totalAll = 0, checkedAll = 0;
+
+    CATEGORIES.forEach(function(cat){
+      var custom = state.custom[cat.id] || [];
+      var total = cat.items.length + custom.length;
+      var checkedCount = 0;
+
+      var rows = '';
+      cat.items.forEach(function(text){
+        var key = itemKey(cat.id, text);
+        var isChecked = !!state.checked[key];
+        if (isChecked) checkedCount++;
+        rows += packRow(key, text, isChecked, false);
+      });
+      custom.forEach(function(item){
+        var key = itemKey(cat.id, 'custom:' + item.id);
+        var isChecked = !!state.checked[key];
+        if (isChecked) checkedCount++;
+        rows += packRow(key, item.text, isChecked, true, cat.id, item.id);
+      });
+
+      totalAll += total; checkedAll += checkedCount;
+
+      html += '<div class="cat-card">' +
+        '<h3><span>' + cat.emoji + ' ' + esc(cat.label) + '</span><span class="count">' + checkedCount + '/' + total + '</span></h3>' +
+        rows +
+        '<form class="add-row" data-cat="' + cat.id + '">' +
+          '<input type="text" placeholder="הוסיפו פריט משלכם..." maxlength="40" autocomplete="off">' +
+          '<button type="submit">+</button>' +
+        '</form>' +
+        '</div>';
+    });
+
+    container.innerHTML = html;
+    $('progressVal').textContent = checkedAll + '/' + totalAll;
+  }
+
+  function packRow(key, text, isChecked, isCustom, catId, customId){
+    return '<div class="pack-row' + (isChecked ? ' checked' : '') + '">' +
+      '<div class="checkbox' + (isChecked ? ' on' : '') + '" data-action="toggle" data-key="' + esc(key) + '">' + (isChecked ? '✓' : '') + '</div>' +
+      '<span class="txt">' + esc(text) + '</span>' +
+      (isCustom ? '<button class="del" data-action="delete-custom" data-cat="' + esc(catId) + '" data-id="' + esc(customId) + '">✕</button>' : '') +
+      '</div>';
+  }
+
+  /* ---------- EVENTS ---------- */
+  document.addEventListener('click', function(e){
+    var themeBtn = e.target.closest('[data-action="toggle-theme"]');
+    if (themeBtn) { toggleTheme(); return; }
+
+    var box = e.target.closest('[data-action="toggle"]');
+    if (box) {
+      var key = box.dataset.key;
+      state.checked[key] = !state.checked[key];
+      saveState(state);
+      render();
+      return;
+    }
+
+    var del = e.target.closest('[data-action="delete-custom"]');
+    if (del) {
+      var catId = del.dataset.cat, id = del.dataset.id;
+      state.custom[catId] = (state.custom[catId] || []).filter(function(it){ return it.id !== id; });
+      delete state.checked[itemKey(catId, 'custom:' + id)];
+      saveState(state);
+      render();
+    }
+  });
+
+  document.addEventListener('submit', function(e){
+    var form = e.target.closest('.add-row');
+    if (!form) return;
+    e.preventDefault();
+    var input = form.querySelector('input');
+    var text = input.value.trim();
+    if (!text) return;
+    var catId = form.dataset.cat;
+    var id = (crypto.randomUUID ? crypto.randomUUID() : ('c-' + Date.now() + '-' + Math.random().toString(16).slice(2)));
+    state.custom[catId] = state.custom[catId] || [];
+    state.custom[catId].push({ id: id, text: text });
+    saveState(state);
+    render();
+  });
+
+  initTheme();
+  render();
+})();
+</script>
+</body>
+</html>
