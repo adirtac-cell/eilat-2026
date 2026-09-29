@@ -121,9 +121,17 @@
   .hero .dates { margin:0 0 14px; opacity:.95; font-size:15px; }
   .countdown {
     display:inline-flex; align-items:center; gap:7px; background:#ffffff26; border:1px solid #ffffff44;
-    border-radius:999px; padding:9px 16px; font-weight:700; font-size:14.5px; margin-bottom:16px;
+    border-radius:999px; padding:9px 16px; font-weight:700; font-size:14.5px;
     backdrop-filter: blur(2px);
   }
+  .hero-toggle {
+    display:flex; align-items:center; gap:4px; background:none; border:none; color:#fff; opacity:.85;
+    font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; padding:10px 2px 0; margin-inline-start:2px;
+  }
+  .hero-toggle .chev { transition: transform .2s ease; display:inline-block; }
+  .hero-toggle.open .chev { transform: rotate(180deg); }
+  .badges-wrap { max-height:0; overflow:hidden; opacity:0; transition: max-height .25s ease, opacity .25s ease; }
+  .badges-wrap.open { max-height:200px; opacity:1; margin-top:14px; }
   .badges { display:flex; gap:8px; flex-wrap:wrap; }
   .badge { background:#ffffff22; border:1px solid #ffffff44; border-radius:999px; padding:7px 11px; font-size:13.5px; }
 
@@ -213,9 +221,14 @@
     <h2>אילת 2026 🌴</h2>
     <p class="dates">30/9–3/10 · חופשה משותפת</p>
     <div class="countdown" id="countdown">🌴</div>
-    <div class="badges">
-      <span class="badge">4 משפחות</span><span class="badge">9 מבוגרים</span><span class="badge">10 ילדים</span>
-      <span class="badge">🏡 כניסה 15:00</span><span class="badge">🚪 יציאה 16:00</span>
+    <button class="hero-toggle" id="heroToggleBtn" data-action="toggle-hero-details">
+      <span class="txt">עוד פרטים</span><span class="chev">▾</span>
+    </button>
+    <div class="badges-wrap" id="badgesWrap">
+      <div class="badges">
+        <span class="badge">4 משפחות</span><span class="badge">9 מבוגרים</span><span class="badge">10 ילדים</span>
+        <span class="badge">🏡 כניסה 15:00</span><span class="badge">🚪 יציאה 16:00</span>
+      </div>
     </div>
   </div>
 </div>
@@ -267,6 +280,18 @@
 (function(){
   "use strict";
   var LS_THEME = 'eilat2026_theme_v1';
+  var LS_HERO_OPEN = 'eilat2026_hero_open_v1';
+
+  function setHeroOpen(open){
+    document.getElementById('badgesWrap').classList.toggle('open', open);
+    var btn = document.getElementById('heroToggleBtn');
+    btn.classList.toggle('open', open);
+    btn.querySelector('.txt').textContent = open ? 'פחות פרטים' : 'עוד פרטים';
+    localStorage.setItem(LS_HERO_OPEN, open ? '1' : '0');
+  }
+  function initHeroToggle(){
+    setHeroOpen(localStorage.getItem(LS_HERO_OPEN) === '1');
+  }
 
   function initTheme(){
     var saved = localStorage.getItem(LS_THEME);
@@ -284,7 +309,9 @@
   }
   document.addEventListener('click', function(e){
     var el = e.target.closest('[data-action="toggle-theme"]');
-    if (el) toggleTheme();
+    if (el) { toggleTheme(); return; }
+    var heroBtn = e.target.closest('[data-action="toggle-hero-details"]');
+    if (heroBtn) setHeroOpen(!document.getElementById('badgesWrap').classList.contains('open'));
   });
 
   function renderCountdown(){
@@ -373,6 +400,7 @@
   }
 
   initTheme();
+  initHeroToggle();
   renderCountdown();
   initHeaderScroll();
   renderToday();
